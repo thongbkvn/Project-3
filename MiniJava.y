@@ -2,9 +2,9 @@
 %token KW_CLASS KW_EXTENDS KW_PUBLIC KW_STATIC KW_BOOLEAN KW_STRING KW_FLOAT KW_INT EOF
 %token KW_IF KW_WHILE KW_BREAK KW_CONTINUE KW_SWITCH KW_CASE KW_DEFAULT KW_RETURN
 %token KW_NEW KW_THIS KW_NULL KW_TRUE KW_FALSE KW_PRINTLN
-%token IDENT INT_LIT FLOAT_LIT STRING_LIT
+%token IDENT INT_LITERAL FLOAT_LITERAL STRING_LITERAL
 %right "THEN" KW_ELSE
-
+%right "STATEMENTS"
 
 %right OP_ASSIGN
 %left OP_OR
@@ -13,7 +13,10 @@
 %nonassoc CMP_GT CMP_LT CMP_GTE CMP_LTE
 %left OP_ADD OP_MINUS
 %left OP_MULT OP_DIV OP_MOD
-%right OP_NEG OP_UNARY
+%left OP_UNARY
+%right OP_NOT
+%left "GROUP" "INDEX"
+%left "ACCESS"
 %%
 Program:		ClassDeclp EOF
 			;
@@ -55,11 +58,11 @@ Type :			Type '['']'
 			| KW_INT
 		  	| IDENT
 			;
-Statements:		/*empty*/
-			| Statements Statement	%prec "Statements"
+Statements:		/*empty*/ %prec "STATEMENT"
+			| Statements Statement	%prec "STATEMENTS"
 			;
-Statementp:		Statement
-			| Statementp Statement
+Statementp:		Statementp Statement %prec "STATEMENTS"
+			| Statement %prec "STATEMENT"
 			;
 Statement:		'{'Statements'}'
 			| KW_IF '(' BoolExpr ')' Statement %prec "THEN"
@@ -79,7 +82,7 @@ Statement:		'{'Statements'}'
 Cases:		 	/*empty*/
 		 	| Cases Case
 		 	;
-Case:		 	KW_CASE INT_LIT ':' Statementp
+Case:		 	KW_CASE INT_LITERAL ':' Statementp
 		 	;
 
 BoolExpr:		KW_TRUE
@@ -87,11 +90,12 @@ BoolExpr:		KW_TRUE
 			| BoolExpr OP_OR BoolExpr
 			| BoolExpr OP_AND BoolExpr
 			| Expression CMP_EQ Expression
+			| Expression CMP_NEQ Expression
 			| Expression CMP_GT Expression
 			| Expression CMP_GTE Expression
 			| Expression CMP_LT Expression
 			| Expression CMP_LTE Expression
-			| OP_NEG BoolExpr
+			| OP_NOT BoolExpr
 			| IDENT
 			;
 
@@ -100,18 +104,19 @@ Expression:	 	Expression OP_ADD Expression
 			| Expression OP_MULT Expression
 			| Expression OP_DIV Expression
 			| Expression OP_MOD Expression
-			| Expression '['Expression']'
-			| Expression '.'"length"
-			| Expression '.' IDENT '(' ParamList ')'
-			| INT_LIT
-			| FLOAT_LIT
-			| STRING_LIT
+			| '-' Expression %prec OP_UNARY
+			| Expression '['Expression']' %prec "INDEX"
+			| Expression '.'"length" %prec "ACCESS"
+			| Expression '.' IDENT '(' ParamList ')' %prec "ACCESS"
+			| INT_LITERAL
+			| FLOAT_LITERAL
+			| STRING_LITERAL
 			| KW_NULL
 			| IDENT
 			| KW_THIS
 			| KW_NEW Type '[' Expression ']'
 			| KW_NEW IDENT '('')'
-			| '(' Expression ')'
+			| '(' Expression ')' %prec "GROUP"
 			;
 
 
@@ -136,3 +141,6 @@ yyerror(char *s)
 {
 	printf("%s\n", s);
 }
+
+/* Co 3 conflict RR can xu ly khi bien thuoc kieu bool
+   giua BoolExpr va Expresstion */
