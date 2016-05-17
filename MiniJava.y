@@ -8,6 +8,7 @@ void yyerror(const char*);
 %}
 %union {
        int num;
+       float real;
        char* str;
 }
 %locations
@@ -85,8 +86,8 @@ Statementp:		Statementp Statement
 			| Statement
 			;
 Statement:		'{'Statements'}'
-			| KW_IF '(' Expression ')' Statement %prec "THEN" {printf("THEN\n");}
-			| KW_IF '(' Expression ')' Statement KW_ELSE Statement {printf("ELSE\n");}
+			| KW_IF '(' Expression ')' Statement %prec "THEN"
+			| KW_IF '(' Expression ')' Statement KW_ELSE Statement
 			| KW_WHILE '(' Expression ')'Statement
 			| KW_PRINTLN '(' Expression ')' ';'
 			| ArrayAccess OP_ASSIGN Expression ';'
