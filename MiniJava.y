@@ -4,7 +4,7 @@
 #include <string.h>
 #include "MiniJava.tab.h"
 extern int yylex();
-void yyerror(const char *);
+void yyerror(const char*);
 %}
 %union {
        int num;
@@ -139,13 +139,15 @@ ParamList:		/*empty*/
 %%
 int main(int argc, char** argv)
 {
-	printf("%s", YY_("syntax error"));
 	extern FILE *yyin;
 	++argv; --argc;
 	if (argc)
 	   yyin = fopen(argv[0], "r");
 	else
-	   yyin = stdin;
+	{
+		printf("No input file\n");
+		return 0;
+	}
 	yyparse();
 	return 0;
 }
