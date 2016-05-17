@@ -4,6 +4,7 @@
 #include <string.h>
 #include "MiniJava.tab.h"
 extern int yylex();
+void yyerror(const char *);
 %}
 %union {
        int num;
@@ -150,8 +151,7 @@ int main(int argc, char** argv)
 }
 
 
-int yyerror(char *s)
+void yyerror(const char *s)
 {
   fprintf(stderr, "ERROR line %d: %s\n", yylloc.first_line,  s);
-  return 0;
 }
