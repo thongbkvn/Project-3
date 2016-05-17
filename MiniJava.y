@@ -1,3 +1,15 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "MiniJava.tab.h"
+extern int yylex();
+%}
+%union {
+       int num;
+       char* str;
+}
+%locations
 %start Program
 %token KW_CLASS KW_EXTENDS KW_PUBLIC KW_STATIC KW_BOOLEAN KW_STRING KW_FLOAT KW_INT END
 %token KW_IF KW_WHILE KW_BREAK KW_CONTINUE KW_SWITCH KW_CASE KW_DEFAULT KW_RETURN
@@ -21,7 +33,7 @@
 %nonassoc '('
 %nonassoc ')'
 %%
-Program:		ClassDeclp END
+Program:		ClassDeclp
 			;
 
 ClassDeclp:		ClassDecl
@@ -100,9 +112,9 @@ Expression:		Expression OP_OR Expression
 			| Expression OP_MULT Expression
 			| Expression OP_DIV Expression
 			| Expression OP_MOD Expression
-			| '-' Expression %prec OP_UNARY
+			| '-' Expression %prec OP_UNARY {printf("Using Unary\n");}
 			| OP_NOT Expression
-			| Expression %prec "SUBSCRIPT" '['Expression']'
+			| Expression %prec "SUBSCRIPT" '['Expression']' {printf("Using Subscript\n");}
 			| Expression '.'"length"
 			| Expression '.' IDENT %prec "FUNCALL" '(' ParamList ')' 
 			| INT_LITERAL
@@ -124,20 +136,22 @@ ParamList:		/*empty*/
 			| Expression
 			;
 %%
-main(int argc, char** argv[])
+int main(int argc, char** argv)
 {
+	printf("%s", YY_("syntax error"));
 	extern FILE *yyin;
 	++argv; --argc;
-	yyin = fopen(argv[0], "r");
-	yydebug = 1;
-	errors = 0;
+	if (argc)
+	   yyin = fopen(argv[0], "r");
+	else
+	   yyin = stdin;
 	yyparse();
+	return 0;
 }
 
-yyerror(char *s)
+
+int yyerror(char *s)
 {
-	printf("%s\n", s);
+  fprintf(stderr, "ERROR line %d: %s\n", yylloc.first_line,  s);
+  return 0;
 }
-
-/* Co 3 conflict RR can xu ly khi bien thuoc kieu bool
-   giua BoolExpr va Expresstion */

@@ -3,7 +3,11 @@
   #include <string.h>
   #include <stdlib.h>
   #include <stdio.h>
+  #define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno;
+
 %}
+%option noyywrap
+%option yylineno
 DIGIT [0-9]
 ID [A-Za-z][A-Za-z0-9]*
 %%
@@ -11,7 +15,7 @@ class 			 {return KW_CLASS;}
 extends			 {return KW_EXTENDS;}
 public			 {return KW_PUBLIC;}
 static			 {return KW_STATIC;}
-boolean			 {return KW_BOOL;}
+boolean			 {return KW_BOOLEAN;}
 string			 {return KW_STRING;}
 float			 {return KW_FLOAT;}
 int			 {return KW_INT;}
@@ -35,29 +39,36 @@ false	 		 {return KW_FALSE;}
 "*"	 		 {return OP_MULT;}
 "/"	 		 {return OP_DIV;}
 "%"	 		 {return OP_MOD;}
-">="	 		 {return OP_GTE;}
-">"	 		 {return OP_GT;}
-"<="	 		 {return OP_LTE;}
-"<"	 		 {return OP_LT;}
-"&&"	 		 {return OP_LAND;}
-"||"	 		 {return OP_LOR;}
+">="	 		 {return CMP_GTE;}
+">"	 		 {return CMP_GT;}
+"<="	 		 {return CMP_LTE;}
+"<"	 		 {return CMP_LT;}
+"&&"	 		 {return OP_AND;}
+"||"	 		 {return OP_OR;}
 "=="	 		 {return CMP_EQ;}
 "!="	 		 {return CMP_NEQ;}
 "="		 	 {return OP_ASSIGN;}
 [ \t\n]+
 .			 {return yytext[0];}
-{DIGIT}+		 {return INT_LIT;}
-"-"{DIGIT}+		 {return INT_LIT;}
-{DIGIT}+"."{DIGIT}*	 {return FLOAT_LIT;}
-"-"{DIGIT}+"."{DIGIT}*	 {return FLOAT_LIT;}
-\".*\"			 {return STRING_LIT;}
+{DIGIT}+		 {return INT_LITERAL;}
+"-"{DIGIT}+		 {return INT_LITERAL;}
+{DIGIT}+"."{DIGIT}*	 {return FLOAT_LITERAL;}
+"-"{DIGIT}+"."{DIGIT}*	 {return FLOAT_LITERAL;}
+\".*\"			 {return STRING_LITERAL;}
 {ID}			 {return IDENT;}
 %%
-int main(int argc, char** argv)
+/*int main(int argc, char** argv)
 {
+	extern FILE *yyin;
 	++argv; --argc;
 	if (arg)
-	   yyin = argv[0];
-	yylex();
+	   yyin = fopen(argv[0], "r");
+	else
+	   return 0;
+	int a;
+	while (a=yylex())
+	{
+		printf("%d\n", a);
+	}
 	return 0;
-}
+}*/
