@@ -85,14 +85,14 @@ Statementp:		Statementp Statement
 			| Statement
 			;
 Statement:		'{'Statements'}'
-			| KW_IF '(' Expression ')' Statement %prec "THEN"
-			| KW_IF '(' Expression ')' Statement KW_ELSE Statement
+			| KW_IF '(' Expression ')' Statement %prec "THEN" {printf("THEN\n");}
+			| KW_IF '(' Expression ')' Statement KW_ELSE Statement {printf("ELSE\n");}
 			| KW_WHILE '(' Expression ')'Statement
 			| KW_PRINTLN '(' Expression ')' ';'
-			| IDENT OP_ASSIGN Expression ';'
+			| ArrayAccess OP_ASSIGN Expression ';'
+			| IDENT OP_ASSIGN Expression ';'     
 			| KW_BREAK ';'
 			| KW_CONTINUE ';'
-			| ArrayAccess OP_ASSIGN Expression ';'
 			| KW_SWITCH '(' Expression ')' '{'
 			  Cases
 			  KW_DEFAULT ':' Statementp '}'

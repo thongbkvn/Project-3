@@ -11,6 +11,8 @@
 DIGIT [0-9]
 ID [A-Za-z][A-Za-z0-9]*
 %%
+"//".*\n
+"/*".*"*/"
 class 			 {return KW_CLASS;}
 extends			 {return KW_EXTENDS;}
 public			 {return KW_PUBLIC;}
