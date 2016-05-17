@@ -48,20 +48,20 @@ false	 		 {return KW_FALSE;}
 "=="	 		 {return CMP_EQ;}
 "!="	 		 {return CMP_NEQ;}
 "="		 	 {return OP_ASSIGN;}
-[ \t\n]+
-.			 {return yytext[0];}
 {DIGIT}+		 {return INT_LITERAL;}
 "-"{DIGIT}+		 {return INT_LITERAL;}
 {DIGIT}+"."{DIGIT}*	 {return FLOAT_LITERAL;}
 "-"{DIGIT}+"."{DIGIT}*	 {return FLOAT_LITERAL;}
 \".*\"			 {return STRING_LITERAL;}
 {ID}			 {return IDENT;}
+[ \t\n]+
+.			 {return yytext[0];}
 %%
 /*int main(int argc, char** argv)
 {
 	extern FILE *yyin;
 	++argv; --argc;
-	if (arg)
+	if (argc)
 	   yyin = fopen(argv[0], "r");
 	else
 	   return 0;

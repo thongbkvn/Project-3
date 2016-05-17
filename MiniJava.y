@@ -12,7 +12,7 @@ void yyerror(const char*);
 }
 %locations
 %start Program
-%token KW_CLASS KW_EXTENDS KW_PUBLIC KW_STATIC KW_BOOLEAN KW_STRING KW_FLOAT KW_INT END
+%token KW_CLASS KW_EXTENDS KW_PUBLIC KW_STATIC KW_BOOLEAN KW_STRING KW_FLOAT KW_INT
 %token KW_IF KW_WHILE KW_BREAK KW_CONTINUE KW_SWITCH KW_CASE KW_DEFAULT KW_RETURN
 %token KW_NEW KW_THIS KW_NULL KW_TRUE KW_FALSE KW_PRINTLN
 %token IDENT INT_LITERAL FLOAT_LITERAL STRING_LITERAL
@@ -20,7 +20,6 @@ void yyerror(const char*);
 %nonassoc "THEN"
 %nonassoc KW_ELSE
 
-%right "STATEMENTS"
 
 %right OP_ASSIGN
 %left OP_OR
@@ -29,8 +28,8 @@ void yyerror(const char*);
 %nonassoc CMP_GT CMP_LT CMP_GTE CMP_LTE
 %left OP_ADD OP_MINUS
 %left OP_MULT OP_DIV OP_MOD
-%right OP_NOT OP_UNARY "NEW" 
-%left "FUNCALL" "SUBSCRIPT"  '.'
+%right OP_NOT OP_UNARY
+%left  '['  '.'
 %nonassoc '('
 %nonassoc ')'
 %%
@@ -47,8 +46,8 @@ ExtendsFrom:		/*empty*/
 		    	| KW_EXTENDS IDENT
 			;
 		
-VarDecls:		/*empty*/
-			| VarDecls VarDecl
+VarDecls:		VarDecls VarDecl 
+			| /*empty*/
 			;
 VarDecl:		Type IDENT ';'
 	  		| KW_STATIC Type IDENT ';' /*Co the sua thanh AcessModifier Type IDENT*/
@@ -57,15 +56,20 @@ VarDecl:		Type IDENT ';'
 MethodDecls:		/*empty*/
 			| MethodDecls MethodDecl
 			;
-MethodDecl:		KW_PUBLIC Type IDENT
-			'('MethodParams')'
+MethodDecl:		KW_PUBLIC Type MethodSignature
 			'{'VarDecls Statements KW_RETURN Expression ';' '}'
 			;
+MethodSignature:	IDENT '('MethodParams')' 
+			;
 			
-MethodParams:		/*empty*/
-			| MethodParams ',' MethodParam
-			;		
-MethodParam:		Type IDENT;
+MethodParams:		/*empty*/ 
+			| ListParam 
+			;
+ListParam:		SingleParam
+			| SingleParam ',' ListParam
+			;
+SingleParam:		Type IDENT
+			;
 
 Type :			Type '['']'
      			| KW_BOOLEAN
@@ -74,10 +78,11 @@ Type :			Type '['']'
 			| KW_INT
 		  	| IDENT
 			;
-Statements:		Statements Statement	%prec "STATEMENTS"
-			| /*empty*/ %prec "STATEMENT"
+Statements:		Statementp
+			| /*empty */
 			;
-Statementp:		Statements Statement %prec "STATEMENTS"
+Statementp:		Statementp Statement
+			| Statement
 			;
 Statement:		'{'Statements'}'
 			| KW_IF '(' Expression ')' Statement %prec "THEN"
@@ -87,7 +92,7 @@ Statement:		'{'Statements'}'
 			| IDENT OP_ASSIGN Expression ';'
 			| KW_BREAK ';'
 			| KW_CONTINUE ';'
-			| IDENT %prec "SUBSCRIPT" '['Expression']' '=' Expression ';'
+			| ArrayAccess OP_ASSIGN Expression ';'
 			| KW_SWITCH '(' Expression ')' '{'
 			  Cases
 			  KW_DEFAULT ':' Statementp '}'
@@ -113,11 +118,11 @@ Expression:		Expression OP_OR Expression
 			| Expression OP_MULT Expression
 			| Expression OP_DIV Expression
 			| Expression OP_MOD Expression
-			| '-' Expression %prec OP_UNARY {printf("Using Unary\n");}
+			| '-' Expression %prec OP_UNARY
 			| OP_NOT Expression
-			| Expression %prec "SUBSCRIPT" '['Expression']' {printf("Using Subscript\n");}
-			| Expression '.'"length"
-			| Expression '.' IDENT %prec "FUNCALL" '(' ParamList ')' 
+			| ArrayAccess
+			| LengthAccess
+			| Expression '.' Funcall
 			| INT_LITERAL
 			| FLOAT_LITERAL
 			| STRING_LITERAL
@@ -126,12 +131,17 @@ Expression:		Expression OP_OR Expression
 			| KW_FALSE
 			| IDENT
 			| KW_THIS
-			| KW_NEW Type '[' Expression ']' %prec "NEW"
-			| KW_NEW IDENT '('')'	     %prec "NEW"
+			| KW_NEW Type '[' Expression ']'
+			| KW_NEW IDENT '('')'	    
 			| '(' Expression ')'
 			;
 
-
+LengthAccess:		Expression '.'"length"
+			;
+ArrayAccess:		IDENT '['Expression']'
+			;
+Funcall:		IDENT '(' ParamList ')'
+			;
 ParamList:		/*empty*/
 			| ParamList ',' Expression
 			| Expression
