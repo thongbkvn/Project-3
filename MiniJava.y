@@ -3,7 +3,10 @@
 %token KW_IF KW_WHILE KW_BREAK KW_CONTINUE KW_SWITCH KW_CASE KW_DEFAULT KW_RETURN
 %token KW_NEW KW_THIS KW_NULL KW_TRUE KW_FALSE KW_PRINTLN
 %token IDENT INT_LITERAL FLOAT_LITERAL STRING_LITERAL
-%right "THEN" KW_ELSE
+
+%nonassoc "THEN"
+%nonassoc KW_ELSE
+
 %right "STATEMENTS"
 
 %right OP_ASSIGN
@@ -13,10 +16,10 @@
 %nonassoc CMP_GT CMP_LT CMP_GTE CMP_LTE
 %left OP_ADD OP_MINUS
 %left OP_MULT OP_DIV OP_MOD
-%left OP_UNARY
-%right OP_NOT
-%left "GROUP" "INDEX"
-%left "ACCESS"
+%right OP_NOT OP_UNARY "NEW" 
+%left "FUNCALL" "SUBSCRIPT"  '.'
+%nonassoc '('
+%nonassoc ')'
 %%
 Program:		ClassDeclp EOF
 			;
@@ -35,7 +38,7 @@ VarDecls:		/*empty*/
 			| VarDecls VarDecl
 			;
 VarDecl:		Type IDENT ';'
-	  		| KW_STATIC Type IDENT ';'
+	  		| KW_STATIC Type IDENT ';' /*Co the sua thanh AcessModifier Type IDENT*/
 			;
 
 MethodDecls:		/*empty*/
@@ -58,73 +61,67 @@ Type :			Type '['']'
 			| KW_INT
 		  	| IDENT
 			;
-Statements:		/*empty*/ %prec "STATEMENT"
-			| Statements Statement	%prec "STATEMENTS"
+Statements:		Statements Statement	%prec "STATEMENTS"
+			| /*empty*/ %prec "STATEMENT"
 			;
-Statementp:		Statementp Statement %prec "STATEMENTS"
-			| Statement %prec "STATEMENT"
+Statementp:		Statements Statement %prec "STATEMENTS"
 			;
 Statement:		'{'Statements'}'
-			| KW_IF '(' BoolExpr ')' Statement %prec "THEN"
-			| KW_IF '(' BoolExpr ')' Statement KW_ELSE Statement
-			| KW_WHILE '(' BoolExpr ')'Statement
+			| KW_IF '(' Expression ')' Statement %prec "THEN"
+			| KW_IF '(' Expression ')' Statement KW_ELSE Statement
+			| KW_WHILE '(' Expression ')'Statement
 			| KW_PRINTLN '(' Expression ')' ';'
 			| IDENT OP_ASSIGN Expression ';'
-			| IDENT OP_ASSIGN BoolExpr ';'
 			| KW_BREAK ';'
 			| KW_CONTINUE ';'
-			| IDENT '['Expression']' '=' Expression ';'
-			| KW_SWITCH '(' BoolExpr ')' '{'
+			| IDENT %prec "SUBSCRIPT" '['Expression']' '=' Expression ';'
+			| KW_SWITCH '(' Expression ')' '{'
 			  Cases
 			  KW_DEFAULT ':' Statementp '}'
 			;
 
-Cases:		 	/*empty*/
-		 	| Cases Case
+Cases:		 	Cases Case
+		 	| /*empty*/
 		 	;
 Case:		 	KW_CASE INT_LITERAL ':' Statementp
 		 	;
 
-BoolExpr:		KW_TRUE
-			| KW_FALSE
-			| BoolExpr OP_OR BoolExpr
-			| BoolExpr OP_AND BoolExpr
+
+Expression:		Expression OP_OR Expression
+			| Expression OP_AND Expression
 			| Expression CMP_EQ Expression
 			| Expression CMP_NEQ Expression
 			| Expression CMP_GT Expression
 			| Expression CMP_GTE Expression
 			| Expression CMP_LT Expression
 			| Expression CMP_LTE Expression
-			| OP_NOT BoolExpr
-			| IDENT
-			;
-
-Expression:	 	Expression OP_ADD Expression
+			| Expression OP_ADD Expression
 			| Expression OP_MINUS Expression
 			| Expression OP_MULT Expression
 			| Expression OP_DIV Expression
 			| Expression OP_MOD Expression
 			| '-' Expression %prec OP_UNARY
-			| Expression '['Expression']' %prec "INDEX"
-			| Expression '.'"length" %prec "ACCESS"
-			| Expression '.' IDENT '(' ParamList ')' %prec "ACCESS"
+			| OP_NOT Expression
+			| Expression %prec "SUBSCRIPT" '['Expression']'
+			| Expression '.'"length"
+			| Expression '.' IDENT %prec "FUNCALL" '(' ParamList ')' 
 			| INT_LITERAL
 			| FLOAT_LITERAL
 			| STRING_LITERAL
 			| KW_NULL
+			| KW_TRUE
+			| KW_FALSE
 			| IDENT
 			| KW_THIS
-			| KW_NEW Type '[' Expression ']'
-			| KW_NEW IDENT '('')'
-			| '(' Expression ')' %prec "GROUP"
+			| KW_NEW Type '[' Expression ']' %prec "NEW"
+			| KW_NEW IDENT '('')'	     %prec "NEW"
+			| '(' Expression ')'
 			;
 
 
 ParamList:		/*empty*/
-			| ParamList ',' Param
-			;
-Param:			Expression
-			| BoolExpr
+			| ParamList ',' Expression
+			| Expression
 			;
 %%
 main(int argc, char** argv[])
