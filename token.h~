@@ -1,0 +1,4 @@
+#ifndef TOKEN_H_
+#define TOKEN_H_
+typedef char* YYSTYPE;
+#endif TOKEN_H_

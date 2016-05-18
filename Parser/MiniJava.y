@@ -55,7 +55,7 @@ VarDecl:		Type IDENT ';'
 			;
 
 MethodDecls:		/*empty*/
-			| MethodDecls MethodDecl
+			| MethodDecls MethodDecl {printf("Method Decls\n");}
 			;
 MethodDecl:		KW_PUBLIC Type MethodSignature
 			'{'VarDecls Statements KW_RETURN Expression ';' '}'

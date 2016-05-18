@@ -1,0 +1,14 @@
+class Hello extends Blo
+{/*abc*/
+    int a; //abc
+    static String b;
+    public void Main (int a)
+	{
+		if (a)
+			if (b)
+				c = d;
+			else
+			c = a;
+		return 0;
+	}
+}

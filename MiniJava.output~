@@ -1,0 +1,2707 @@
+State 47 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: ClassDeclp
+
+    2 ClassDeclp: ClassDecl
+    3           | ClassDeclp ClassDecl
+
+    4 ClassDecl: KW_CLASS IDENT ExtendsFrom '{' VarDecls MethodDecls '}'
+
+    5 ExtendsFrom: %empty
+    6            | KW_EXTENDS IDENT
+
+    7 VarDecls: VarDecls VarDecl
+    8         | %empty
+
+    9 VarDecl: Type IDENT ';'
+   10        | KW_STATIC Type IDENT ';'
+
+   11 MethodDecls: %empty
+   12            | MethodDecls MethodDecl
+
+   13 MethodDecl: KW_PUBLIC Type MethodSignature '{' VarDecls Statements KW_RETURN Expression ';' '}'
+
+   14 MethodSignature: IDENT '(' MethodParams ')'
+
+   15 MethodParams: %empty
+   16             | MethodParams ',' MethodParam
+
+   17 MethodParam: Type IDENT
+
+   18 Type: Type '[' ']'
+   19     | KW_BOOLEAN
+   20     | KW_STRING
+   21     | KW_FLOAT
+   22     | KW_INT
+   23     | IDENT
+
+   24 Statements: Statementp
+   25           | %empty
+
+   26 Statementp: Statementp Statement
+   27           | Statement
+
+   28 Statement: '{' Statements '}'
+   29          | KW_IF '(' Expression ')' Statement
+   30          | KW_IF '(' Expression ')' Statement KW_ELSE Statement
+   31          | KW_WHILE '(' Expression ')' Statement
+   32          | KW_PRINTLN '(' Expression ')' ';'
+   33          | IDENT OP_ASSIGN Expression ';'
+   34          | KW_BREAK ';'
+   35          | KW_CONTINUE ';'
+   36          | ArrayAccess OP_ASSIGN Expression ';'
+   37          | KW_SWITCH '(' Expression ')' '{' Cases KW_DEFAULT ':' Statementp '}'
+
+   38 Cases: Cases Case
+   39      | %empty
+
+   40 Case: KW_CASE INT_LITERAL ':' Statementp
+
+   41 Expression: Expression OP_OR Expression
+   42           | Expression OP_AND Expression
+   43           | Expression CMP_EQ Expression
+   44           | Expression CMP_NEQ Expression
+   45           | Expression CMP_GT Expression
+   46           | Expression CMP_GTE Expression
+   47           | Expression CMP_LT Expression
+   48           | Expression CMP_LTE Expression
+   49           | Expression OP_ADD Expression
+   50           | Expression OP_MINUS Expression
+   51           | Expression OP_MULT Expression
+   52           | Expression OP_DIV Expression
+   53           | Expression OP_MOD Expression
+   54           | '-' Expression
+   55           | OP_NOT Expression
+   56           | ArrayAccess
+   57           | LengthAccess
+   58           | Expression '.' Funcall
+   59           | INT_LITERAL
+   60           | FLOAT_LITERAL
+   61           | STRING_LITERAL
+   62           | KW_NULL
+   63           | KW_TRUE
+   64           | KW_FALSE
+   65           | IDENT
+   66           | KW_THIS
+   67           | KW_NEW Type '[' Expression ']'
+   68           | KW_NEW IDENT '(' ')'
+   69           | '(' Expression ')'
+
+   70 LengthAccess: Expression '.' "length"
+
+   71 ArrayAccess: IDENT '[' Expression ']'
+
+   72 Funcall: IDENT '(' ParamList ')'
+
+   73 ParamList: %empty
+   74          | ParamList ',' Expression
+   75          | Expression
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 14 29 30 31 32 37 68 69 72
+')' (41) 14 29 30 31 32 37 68 69 72
+',' (44) 16 74
+'-' (45) 54
+'.' (46) 58 70
+':' (58) 37 40
+';' (59) 9 10 13 32 33 34 35 36
+'[' (91) 18 67 71
+']' (93) 18 67 71
+'{' (123) 4 13 28 37
+'}' (125) 4 13 28 37
+error (256)
+KW_CLASS (258) 4
+KW_EXTENDS (259) 6
+KW_PUBLIC (260) 13
+KW_STATIC (261) 10
+KW_BOOLEAN (262) 19
+KW_STRING (263) 20
+KW_FLOAT (264) 21
+KW_INT (265) 22
+KW_IF (266) 29 30
+KW_WHILE (267) 31
+KW_BREAK (268) 34
+KW_CONTINUE (269) 35
+KW_SWITCH (270) 37
+KW_CASE (271) 40
+KW_DEFAULT (272) 37
+KW_RETURN (273) 13
+KW_NEW (274) 67 68
+KW_THIS (275) 66
+KW_NULL (276) 62
+KW_TRUE (277) 63
+KW_FALSE (278) 64
+KW_PRINTLN (279) 32
+IDENT (280) 4 6 9 10 14 17 23 33 65 68 71 72
+INT_LITERAL (281) 40 59
+FLOAT_LITERAL (282) 60
+STRING_LITERAL (283) 61
+"THEN" (284)
+KW_ELSE (285) 30
+OP_ASSIGN (286) 33 36
+OP_OR (287) 41
+OP_AND (288) 42
+CMP_EQ (289) 43
+CMP_NEQ (290) 44
+CMP_GT (291) 45
+CMP_LT (292) 47
+CMP_GTE (293) 46
+CMP_LTE (294) 48
+OP_ADD (295) 49
+OP_MINUS (296) 50
+OP_MULT (297) 51
+OP_DIV (298) 52
+OP_MOD (299) 53
+OP_NOT (300) 55
+OP_UNARY (301)
+"length" (302) 70
+
+
+Nonterminals, with rules where they appear
+
+$accept (59)
+    on left: 0
+Program (60)
+    on left: 1, on right: 0
+ClassDeclp (61)
+    on left: 2 3, on right: 1 3
+ClassDecl (62)
+    on left: 4, on right: 2 3
+ExtendsFrom (63)
+    on left: 5 6, on right: 4
+VarDecls (64)
+    on left: 7 8, on right: 4 7 13
+VarDecl (65)
+    on left: 9 10, on right: 7
+MethodDecls (66)
+    on left: 11 12, on right: 4 12
+MethodDecl (67)
+    on left: 13, on right: 12
+MethodSignature (68)
+    on left: 14, on right: 13
+MethodParams (69)
+    on left: 15 16, on right: 14 16
+MethodParam (70)
+    on left: 17, on right: 16
+Type (71)
+    on left: 18 19 20 21 22 23, on right: 9 10 13 17 18 67
+Statements (72)
+    on left: 24 25, on right: 13 28
+Statementp (73)
+    on left: 26 27, on right: 24 26 37 40
+Statement (74)
+    on left: 28 29 30 31 32 33 34 35 36 37, on right: 26 27 29 30 31
+Cases (75)
+    on left: 38 39, on right: 37 38
+Case (76)
+    on left: 40, on right: 38
+Expression (77)
+    on left: 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58
+    59 60 61 62 63 64 65 66 67 68 69, on right: 13 29 30 31 32 33 36
+    37 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 58 67 69 70 71
+    74 75
+LengthAccess (78)
+    on left: 70, on right: 57
+ArrayAccess (79)
+    on left: 71, on right: 36 56
+Funcall (80)
+    on left: 72, on right: 58
+ParamList (81)
+    on left: 73 74 75, on right: 72 74
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    KW_CLASS  shift, and go to state 1
+
+    Program     go to state 2
+    ClassDeclp  go to state 3
+    ClassDecl   go to state 4
+
+
+State 1
+
+    4 ClassDecl: KW_CLASS . IDENT ExtendsFrom '{' VarDecls MethodDecls '}'
+
+    IDENT  shift, and go to state 5
+
+
+State 2
+
+    0 $accept: Program . $end
+
+    $end  shift, and go to state 6
+
+
+State 3
+
+    1 Program: ClassDeclp .
+    3 ClassDeclp: ClassDeclp . ClassDecl
+
+    KW_CLASS  shift, and go to state 1
+
+    $default  reduce using rule 1 (Program)
+
+    ClassDecl  go to state 7
+
+
+State 4
+
+    2 ClassDeclp: ClassDecl .
+
+    $default  reduce using rule 2 (ClassDeclp)
+
+
+State 5
+
+    4 ClassDecl: KW_CLASS IDENT . ExtendsFrom '{' VarDecls MethodDecls '}'
+
+    KW_EXTENDS  shift, and go to state 8
+
+    $default  reduce using rule 5 (ExtendsFrom)
+
+    ExtendsFrom  go to state 9
+
+
+State 6
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+State 7
+
+    3 ClassDeclp: ClassDeclp ClassDecl .
+
+    $default  reduce using rule 3 (ClassDeclp)
+
+
+State 8
+
+    6 ExtendsFrom: KW_EXTENDS . IDENT
+
+    IDENT  shift, and go to state 10
+
+
+State 9
+
+    4 ClassDecl: KW_CLASS IDENT ExtendsFrom . '{' VarDecls MethodDecls '}'
+
+    '{'  shift, and go to state 11
+
+
+State 10
+
+    6 ExtendsFrom: KW_EXTENDS IDENT .
+
+    $default  reduce using rule 6 (ExtendsFrom)
+
+
+State 11
+
+    4 ClassDecl: KW_CLASS IDENT ExtendsFrom '{' . VarDecls MethodDecls '}'
+
+    $default  reduce using rule 8 (VarDecls)
+
+    VarDecls  go to state 12
+
+
+State 12
+
+    4 ClassDecl: KW_CLASS IDENT ExtendsFrom '{' VarDecls . MethodDecls '}'
+    7 VarDecls: VarDecls . VarDecl
+
+    KW_STATIC   shift, and go to state 13
+    KW_BOOLEAN  shift, and go to state 14
+    KW_STRING   shift, and go to state 15
+    KW_FLOAT    shift, and go to state 16
+    KW_INT      shift, and go to state 17
+    IDENT       shift, and go to state 18
+
+    $default  reduce using rule 11 (MethodDecls)
+
+    VarDecl      go to state 19
+    MethodDecls  go to state 20
+    Type         go to state 21
+
+
+State 13
+
+   10 VarDecl: KW_STATIC . Type IDENT ';'
+
+    KW_BOOLEAN  shift, and go to state 14
+    KW_STRING   shift, and go to state 15
+    KW_FLOAT    shift, and go to state 16
+    KW_INT      shift, and go to state 17
+    IDENT       shift, and go to state 18
+
+    Type  go to state 22
+
+
+State 14
+
+   19 Type: KW_BOOLEAN .
+
+    $default  reduce using rule 19 (Type)
+
+
+State 15
+
+   20 Type: KW_STRING .
+
+    $default  reduce using rule 20 (Type)
+
+
+State 16
+
+   21 Type: KW_FLOAT .
+
+    $default  reduce using rule 21 (Type)
+
+
+State 17
+
+   22 Type: KW_INT .
+
+    $default  reduce using rule 22 (Type)
+
+
+State 18
+
+   23 Type: IDENT .
+
+    $default  reduce using rule 23 (Type)
+
+
+State 19
+
+    7 VarDecls: VarDecls VarDecl .
+
+    $default  reduce using rule 7 (VarDecls)
+
+
+State 20
+
+    4 ClassDecl: KW_CLASS IDENT ExtendsFrom '{' VarDecls MethodDecls . '}'
+   12 MethodDecls: MethodDecls . MethodDecl
+
+    KW_PUBLIC  shift, and go to state 23
+    '}'        shift, and go to state 24
+
+    MethodDecl  go to state 25
+
+
+State 21
+
+    9 VarDecl: Type . IDENT ';'
+   18 Type: Type . '[' ']'
+
+    IDENT  shift, and go to state 26
+    '['    shift, and go to state 27
+
+
+State 22
+
+   10 VarDecl: KW_STATIC Type . IDENT ';'
+   18 Type: Type . '[' ']'
+
+    IDENT  shift, and go to state 28
+    '['    shift, and go to state 27
+
+
+State 23
+
+   13 MethodDecl: KW_PUBLIC . Type MethodSignature '{' VarDecls Statements KW_RETURN Expression ';' '}'
+
+    KW_BOOLEAN  shift, and go to state 14
+    KW_STRING   shift, and go to state 15
+    KW_FLOAT    shift, and go to state 16
+    KW_INT      shift, and go to state 17
+    IDENT       shift, and go to state 18
+
+    Type  go to state 29
+
+
+State 24
+
+    4 ClassDecl: KW_CLASS IDENT ExtendsFrom '{' VarDecls MethodDecls '}' .
+
+    $default  reduce using rule 4 (ClassDecl)
+
+
+State 25
+
+   12 MethodDecls: MethodDecls MethodDecl .
+
+    $default  reduce using rule 12 (MethodDecls)
+
+
+State 26
+
+    9 VarDecl: Type IDENT . ';'
+
+    ';'  shift, and go to state 30
+
+
+State 27
+
+   18 Type: Type '[' . ']'
+
+    ']'  shift, and go to state 31
+
+
+State 28
+
+   10 VarDecl: KW_STATIC Type IDENT . ';'
+
+    ';'  shift, and go to state 32
+
+
+State 29
+
+   13 MethodDecl: KW_PUBLIC Type . MethodSignature '{' VarDecls Statements KW_RETURN Expression ';' '}'
+   18 Type: Type . '[' ']'
+
+    IDENT  shift, and go to state 33
+    '['    shift, and go to state 27
+
+    MethodSignature  go to state 34
+
+
+State 30
+
+    9 VarDecl: Type IDENT ';' .
+
+    $default  reduce using rule 9 (VarDecl)
+
+
+State 31
+
+   18 Type: Type '[' ']' .
+
+    $default  reduce using rule 18 (Type)
+
+
+State 32
+
+   10 VarDecl: KW_STATIC Type IDENT ';' .
+
+    $default  reduce using rule 10 (VarDecl)
+
+
+State 33
+
+   14 MethodSignature: IDENT . '(' MethodParams ')'
+
+    '('  shift, and go to state 35
+
+
+State 34
+
+   13 MethodDecl: KW_PUBLIC Type MethodSignature . '{' VarDecls Statements KW_RETURN Expression ';' '}'
+
+    '{'  shift, and go to state 36
+
+
+State 35
+
+   14 MethodSignature: IDENT '(' . MethodParams ')'
+
+    $default  reduce using rule 15 (MethodParams)
+
+    MethodParams  go to state 37
+
+
+State 36
+
+   13 MethodDecl: KW_PUBLIC Type MethodSignature '{' . VarDecls Statements KW_RETURN Expression ';' '}'
+
+    $default  reduce using rule 8 (VarDecls)
+
+    VarDecls  go to state 38
+
+
+State 37
+
+   14 MethodSignature: IDENT '(' MethodParams . ')'
+   16 MethodParams: MethodParams . ',' MethodParam
+
+    ')'  shift, and go to state 39
+    ','  shift, and go to state 40
+
+
+State 38
+
+    7 VarDecls: VarDecls . VarDecl
+   13 MethodDecl: KW_PUBLIC Type MethodSignature '{' VarDecls . Statements KW_RETURN Expression ';' '}'
+
+    KW_STATIC    shift, and go to state 13
+    KW_BOOLEAN   shift, and go to state 14
+    KW_STRING    shift, and go to state 15
+    KW_FLOAT     shift, and go to state 16
+    KW_INT       shift, and go to state 17
+    KW_IF        shift, and go to state 41
+    KW_WHILE     shift, and go to state 42
+    KW_BREAK     shift, and go to state 43
+    KW_CONTINUE  shift, and go to state 44
+    KW_SWITCH    shift, and go to state 45
+    KW_PRINTLN   shift, and go to state 46
+    IDENT        shift, and go to state 47
+    '{'          shift, and go to state 48
+
+    $default  reduce using rule 25 (Statements)
+
+    VarDecl      go to state 19
+    Type         go to state 21
+    Statements   go to state 49
+    Statementp   go to state 50
+    Statement    go to state 51
+    ArrayAccess  go to state 52
+
+
+State 39
+
+   14 MethodSignature: IDENT '(' MethodParams ')' .
+
+    $default  reduce using rule 14 (MethodSignature)
+
+
+State 40
+
+   16 MethodParams: MethodParams ',' . MethodParam
+
+    KW_BOOLEAN  shift, and go to state 14
+    KW_STRING   shift, and go to state 15
+    KW_FLOAT    shift, and go to state 16
+    KW_INT      shift, and go to state 17
+    IDENT       shift, and go to state 18
+
+    MethodParam  go to state 53
+    Type         go to state 54
+
+
+State 41
+
+   29 Statement: KW_IF . '(' Expression ')' Statement
+   30          | KW_IF . '(' Expression ')' Statement KW_ELSE Statement
+
+    '('  shift, and go to state 55
+
+
+State 42
+
+   31 Statement: KW_WHILE . '(' Expression ')' Statement
+
+    '('  shift, and go to state 56
+
+
+State 43
+
+   34 Statement: KW_BREAK . ';'
+
+    ';'  shift, and go to state 57
+
+
+State 44
+
+   35 Statement: KW_CONTINUE . ';'
+
+    ';'  shift, and go to state 58
+
+
+State 45
+
+   37 Statement: KW_SWITCH . '(' Expression ')' '{' Cases KW_DEFAULT ':' Statementp '}'
+
+    '('  shift, and go to state 59
+
+
+State 46
+
+   32 Statement: KW_PRINTLN . '(' Expression ')' ';'
+
+    '('  shift, and go to state 60
+
+
+State 47
+
+   23 Type: IDENT .
+   33 Statement: IDENT . OP_ASSIGN Expression ';'
+   71 ArrayAccess: IDENT . '[' Expression ']'
+
+    OP_ASSIGN  shift, and go to state 61
+    '['        shift, and go to state 62
+
+    '['       [reduce using rule 23 (Type)]
+    $default  reduce using rule 23 (Type)
+
+
+State 48
+
+   28 Statement: '{' . Statements '}'
+
+    KW_IF        shift, and go to state 41
+    KW_WHILE     shift, and go to state 42
+    KW_BREAK     shift, and go to state 43
+    KW_CONTINUE  shift, and go to state 44
+    KW_SWITCH    shift, and go to state 45
+    KW_PRINTLN   shift, and go to state 46
+    IDENT        shift, and go to state 63
+    '{'          shift, and go to state 48
+
+    $default  reduce using rule 25 (Statements)
+
+    Statements   go to state 64
+    Statementp   go to state 50
+    Statement    go to state 51
+    ArrayAccess  go to state 52
+
+
+State 49
+
+   13 MethodDecl: KW_PUBLIC Type MethodSignature '{' VarDecls Statements . KW_RETURN Expression ';' '}'
+
+    KW_RETURN  shift, and go to state 65
+
+
+State 50
+
+   24 Statements: Statementp .
+   26 Statementp: Statementp . Statement
+
+    KW_IF        shift, and go to state 41
+    KW_WHILE     shift, and go to state 42
+    KW_BREAK     shift, and go to state 43
+    KW_CONTINUE  shift, and go to state 44
+    KW_SWITCH    shift, and go to state 45
+    KW_PRINTLN   shift, and go to state 46
+    IDENT        shift, and go to state 63
+    '{'          shift, and go to state 48
+
+    $default  reduce using rule 24 (Statements)
+
+    Statement    go to state 66
+    ArrayAccess  go to state 52
+
+
+State 51
+
+   27 Statementp: Statement .
+
+    $default  reduce using rule 27 (Statementp)
+
+
+State 52
+
+   36 Statement: ArrayAccess . OP_ASSIGN Expression ';'
+
+    OP_ASSIGN  shift, and go to state 67
+
+
+State 53
+
+   16 MethodParams: MethodParams ',' MethodParam .
+
+    $default  reduce using rule 16 (MethodParams)
+
+
+State 54
+
+   17 MethodParam: Type . IDENT
+   18 Type: Type . '[' ']'
+
+    IDENT  shift, and go to state 68
+    '['    shift, and go to state 27
+
+
+State 55
+
+   29 Statement: KW_IF '(' . Expression ')' Statement
+   30          | KW_IF '(' . Expression ')' Statement KW_ELSE Statement
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 81
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 56
+
+   31 Statement: KW_WHILE '(' . Expression ')' Statement
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 84
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 57
+
+   34 Statement: KW_BREAK ';' .
+
+    $default  reduce using rule 34 (Statement)
+
+
+State 58
+
+   35 Statement: KW_CONTINUE ';' .
+
+    $default  reduce using rule 35 (Statement)
+
+
+State 59
+
+   37 Statement: KW_SWITCH '(' . Expression ')' '{' Cases KW_DEFAULT ':' Statementp '}'
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 85
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 60
+
+   32 Statement: KW_PRINTLN '(' . Expression ')' ';'
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 86
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 61
+
+   33 Statement: IDENT OP_ASSIGN . Expression ';'
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 87
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 62
+
+   71 ArrayAccess: IDENT '[' . Expression ']'
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 88
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 63
+
+   33 Statement: IDENT . OP_ASSIGN Expression ';'
+   71 ArrayAccess: IDENT . '[' Expression ']'
+
+    OP_ASSIGN  shift, and go to state 61
+    '['        shift, and go to state 62
+
+
+State 64
+
+   28 Statement: '{' Statements . '}'
+
+    '}'  shift, and go to state 89
+
+
+State 65
+
+   13 MethodDecl: KW_PUBLIC Type MethodSignature '{' VarDecls Statements KW_RETURN . Expression ';' '}'
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 90
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 66
+
+   26 Statementp: Statementp Statement .
+
+    $default  reduce using rule 26 (Statementp)
+
+
+State 67
+
+   36 Statement: ArrayAccess OP_ASSIGN . Expression ';'
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 91
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 68
+
+   17 MethodParam: Type IDENT .
+
+    $default  reduce using rule 17 (MethodParam)
+
+
+State 69
+
+   67 Expression: KW_NEW . Type '[' Expression ']'
+   68           | KW_NEW . IDENT '(' ')'
+
+    KW_BOOLEAN  shift, and go to state 14
+    KW_STRING   shift, and go to state 15
+    KW_FLOAT    shift, and go to state 16
+    KW_INT      shift, and go to state 17
+    IDENT       shift, and go to state 92
+
+    Type  go to state 93
+
+
+State 70
+
+   66 Expression: KW_THIS .
+
+    $default  reduce using rule 66 (Expression)
+
+
+State 71
+
+   62 Expression: KW_NULL .
+
+    $default  reduce using rule 62 (Expression)
+
+
+State 72
+
+   63 Expression: KW_TRUE .
+
+    $default  reduce using rule 63 (Expression)
+
+
+State 73
+
+   64 Expression: KW_FALSE .
+
+    $default  reduce using rule 64 (Expression)
+
+
+State 74
+
+   65 Expression: IDENT .
+   71 ArrayAccess: IDENT . '[' Expression ']'
+
+    '['  shift, and go to state 62
+
+    $default  reduce using rule 65 (Expression)
+
+
+State 75
+
+   59 Expression: INT_LITERAL .
+
+    $default  reduce using rule 59 (Expression)
+
+
+State 76
+
+   60 Expression: FLOAT_LITERAL .
+
+    $default  reduce using rule 60 (Expression)
+
+
+State 77
+
+   61 Expression: STRING_LITERAL .
+
+    $default  reduce using rule 61 (Expression)
+
+
+State 78
+
+   55 Expression: OP_NOT . Expression
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 94
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 79
+
+   69 Expression: '(' . Expression ')'
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 95
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 80
+
+   54 Expression: '-' . Expression
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 96
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 81
+
+   29 Statement: KW_IF '(' Expression . ')' Statement
+   30          | KW_IF '(' Expression . ')' Statement KW_ELSE Statement
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    OP_OR     shift, and go to state 97
+    OP_AND    shift, and go to state 98
+    CMP_EQ    shift, and go to state 99
+    CMP_NEQ   shift, and go to state 100
+    CMP_GT    shift, and go to state 101
+    CMP_LT    shift, and go to state 102
+    CMP_GTE   shift, and go to state 103
+    CMP_LTE   shift, and go to state 104
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+    ')'       shift, and go to state 111
+
+
+State 82
+
+   57 Expression: LengthAccess .
+
+    $default  reduce using rule 57 (Expression)
+
+
+State 83
+
+   56 Expression: ArrayAccess .
+
+    $default  reduce using rule 56 (Expression)
+
+
+State 84
+
+   31 Statement: KW_WHILE '(' Expression . ')' Statement
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    OP_OR     shift, and go to state 97
+    OP_AND    shift, and go to state 98
+    CMP_EQ    shift, and go to state 99
+    CMP_NEQ   shift, and go to state 100
+    CMP_GT    shift, and go to state 101
+    CMP_LT    shift, and go to state 102
+    CMP_GTE   shift, and go to state 103
+    CMP_LTE   shift, and go to state 104
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+    ')'       shift, and go to state 112
+
+
+State 85
+
+   37 Statement: KW_SWITCH '(' Expression . ')' '{' Cases KW_DEFAULT ':' Statementp '}'
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    OP_OR     shift, and go to state 97
+    OP_AND    shift, and go to state 98
+    CMP_EQ    shift, and go to state 99
+    CMP_NEQ   shift, and go to state 100
+    CMP_GT    shift, and go to state 101
+    CMP_LT    shift, and go to state 102
+    CMP_GTE   shift, and go to state 103
+    CMP_LTE   shift, and go to state 104
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+    ')'       shift, and go to state 113
+
+
+State 86
+
+   32 Statement: KW_PRINTLN '(' Expression . ')' ';'
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    OP_OR     shift, and go to state 97
+    OP_AND    shift, and go to state 98
+    CMP_EQ    shift, and go to state 99
+    CMP_NEQ   shift, and go to state 100
+    CMP_GT    shift, and go to state 101
+    CMP_LT    shift, and go to state 102
+    CMP_GTE   shift, and go to state 103
+    CMP_LTE   shift, and go to state 104
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+    ')'       shift, and go to state 114
+
+
+State 87
+
+   33 Statement: IDENT OP_ASSIGN Expression . ';'
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    OP_OR     shift, and go to state 97
+    OP_AND    shift, and go to state 98
+    CMP_EQ    shift, and go to state 99
+    CMP_NEQ   shift, and go to state 100
+    CMP_GT    shift, and go to state 101
+    CMP_LT    shift, and go to state 102
+    CMP_GTE   shift, and go to state 103
+    CMP_LTE   shift, and go to state 104
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+    ';'       shift, and go to state 115
+
+
+State 88
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+   71 ArrayAccess: IDENT '[' Expression . ']'
+
+    OP_OR     shift, and go to state 97
+    OP_AND    shift, and go to state 98
+    CMP_EQ    shift, and go to state 99
+    CMP_NEQ   shift, and go to state 100
+    CMP_GT    shift, and go to state 101
+    CMP_LT    shift, and go to state 102
+    CMP_GTE   shift, and go to state 103
+    CMP_LTE   shift, and go to state 104
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+    ']'       shift, and go to state 116
+
+
+State 89
+
+   28 Statement: '{' Statements '}' .
+
+    $default  reduce using rule 28 (Statement)
+
+
+State 90
+
+   13 MethodDecl: KW_PUBLIC Type MethodSignature '{' VarDecls Statements KW_RETURN Expression . ';' '}'
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    OP_OR     shift, and go to state 97
+    OP_AND    shift, and go to state 98
+    CMP_EQ    shift, and go to state 99
+    CMP_NEQ   shift, and go to state 100
+    CMP_GT    shift, and go to state 101
+    CMP_LT    shift, and go to state 102
+    CMP_GTE   shift, and go to state 103
+    CMP_LTE   shift, and go to state 104
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+    ';'       shift, and go to state 117
+
+
+State 91
+
+   36 Statement: ArrayAccess OP_ASSIGN Expression . ';'
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    OP_OR     shift, and go to state 97
+    OP_AND    shift, and go to state 98
+    CMP_EQ    shift, and go to state 99
+    CMP_NEQ   shift, and go to state 100
+    CMP_GT    shift, and go to state 101
+    CMP_LT    shift, and go to state 102
+    CMP_GTE   shift, and go to state 103
+    CMP_LTE   shift, and go to state 104
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+    ';'       shift, and go to state 118
+
+
+State 92
+
+   23 Type: IDENT .
+   68 Expression: KW_NEW IDENT . '(' ')'
+
+    '('  shift, and go to state 119
+
+    $default  reduce using rule 23 (Type)
+
+
+State 93
+
+   18 Type: Type . '[' ']'
+   67 Expression: KW_NEW Type . '[' Expression ']'
+
+    '['  shift, and go to state 120
+
+
+State 94
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   55           | OP_NOT Expression .
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    '.'  shift, and go to state 110
+
+    $default  reduce using rule 55 (Expression)
+
+
+State 95
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   69           | '(' Expression . ')'
+   70 LengthAccess: Expression . '.' "length"
+
+    OP_OR     shift, and go to state 97
+    OP_AND    shift, and go to state 98
+    CMP_EQ    shift, and go to state 99
+    CMP_NEQ   shift, and go to state 100
+    CMP_GT    shift, and go to state 101
+    CMP_LT    shift, and go to state 102
+    CMP_GTE   shift, and go to state 103
+    CMP_LTE   shift, and go to state 104
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+    ')'       shift, and go to state 121
+
+
+State 96
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   54           | '-' Expression .
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    '.'  shift, and go to state 110
+
+    $default  reduce using rule 54 (Expression)
+
+
+State 97
+
+   41 Expression: Expression OP_OR . Expression
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 122
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 98
+
+   42 Expression: Expression OP_AND . Expression
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 123
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 99
+
+   43 Expression: Expression CMP_EQ . Expression
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 124
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 100
+
+   44 Expression: Expression CMP_NEQ . Expression
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 125
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 101
+
+   45 Expression: Expression CMP_GT . Expression
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 126
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 102
+
+   47 Expression: Expression CMP_LT . Expression
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 127
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 103
+
+   46 Expression: Expression CMP_GTE . Expression
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 128
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 104
+
+   48 Expression: Expression CMP_LTE . Expression
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 129
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 105
+
+   49 Expression: Expression OP_ADD . Expression
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 130
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 106
+
+   50 Expression: Expression OP_MINUS . Expression
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 131
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 107
+
+   51 Expression: Expression OP_MULT . Expression
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 132
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 108
+
+   52 Expression: Expression OP_DIV . Expression
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 133
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 109
+
+   53 Expression: Expression OP_MOD . Expression
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 134
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 110
+
+   58 Expression: Expression '.' . Funcall
+   70 LengthAccess: Expression '.' . "length"
+
+    IDENT     shift, and go to state 135
+    "length"  shift, and go to state 136
+
+    Funcall  go to state 137
+
+
+State 111
+
+   29 Statement: KW_IF '(' Expression ')' . Statement
+   30          | KW_IF '(' Expression ')' . Statement KW_ELSE Statement
+
+    KW_IF        shift, and go to state 41
+    KW_WHILE     shift, and go to state 42
+    KW_BREAK     shift, and go to state 43
+    KW_CONTINUE  shift, and go to state 44
+    KW_SWITCH    shift, and go to state 45
+    KW_PRINTLN   shift, and go to state 46
+    IDENT        shift, and go to state 63
+    '{'          shift, and go to state 48
+
+    Statement    go to state 138
+    ArrayAccess  go to state 52
+
+
+State 112
+
+   31 Statement: KW_WHILE '(' Expression ')' . Statement
+
+    KW_IF        shift, and go to state 41
+    KW_WHILE     shift, and go to state 42
+    KW_BREAK     shift, and go to state 43
+    KW_CONTINUE  shift, and go to state 44
+    KW_SWITCH    shift, and go to state 45
+    KW_PRINTLN   shift, and go to state 46
+    IDENT        shift, and go to state 63
+    '{'          shift, and go to state 48
+
+    Statement    go to state 139
+    ArrayAccess  go to state 52
+
+
+State 113
+
+   37 Statement: KW_SWITCH '(' Expression ')' . '{' Cases KW_DEFAULT ':' Statementp '}'
+
+    '{'  shift, and go to state 140
+
+
+State 114
+
+   32 Statement: KW_PRINTLN '(' Expression ')' . ';'
+
+    ';'  shift, and go to state 141
+
+
+State 115
+
+   33 Statement: IDENT OP_ASSIGN Expression ';' .
+
+    $default  reduce using rule 33 (Statement)
+
+
+State 116
+
+   71 ArrayAccess: IDENT '[' Expression ']' .
+
+    $default  reduce using rule 71 (ArrayAccess)
+
+
+State 117
+
+   13 MethodDecl: KW_PUBLIC Type MethodSignature '{' VarDecls Statements KW_RETURN Expression ';' . '}'
+
+    '}'  shift, and go to state 142
+
+
+State 118
+
+   36 Statement: ArrayAccess OP_ASSIGN Expression ';' .
+
+    $default  reduce using rule 36 (Statement)
+
+
+State 119
+
+   68 Expression: KW_NEW IDENT '(' . ')'
+
+    ')'  shift, and go to state 143
+
+
+State 120
+
+   18 Type: Type '[' . ']'
+   67 Expression: KW_NEW Type '[' . Expression ']'
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    ']'             shift, and go to state 31
+    '-'             shift, and go to state 80
+
+    Expression    go to state 144
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 121
+
+   69 Expression: '(' Expression ')' .
+
+    $default  reduce using rule 69 (Expression)
+
+
+State 122
+
+   41 Expression: Expression . OP_OR Expression
+   41           | Expression OP_OR Expression .
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    OP_AND    shift, and go to state 98
+    CMP_EQ    shift, and go to state 99
+    CMP_NEQ   shift, and go to state 100
+    CMP_GT    shift, and go to state 101
+    CMP_LT    shift, and go to state 102
+    CMP_GTE   shift, and go to state 103
+    CMP_LTE   shift, and go to state 104
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+
+    $default  reduce using rule 41 (Expression)
+
+
+State 123
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   42           | Expression OP_AND Expression .
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    CMP_EQ    shift, and go to state 99
+    CMP_NEQ   shift, and go to state 100
+    CMP_GT    shift, and go to state 101
+    CMP_LT    shift, and go to state 102
+    CMP_GTE   shift, and go to state 103
+    CMP_LTE   shift, and go to state 104
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+
+    $default  reduce using rule 42 (Expression)
+
+
+State 124
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   43           | Expression CMP_EQ Expression .
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    CMP_GT    shift, and go to state 101
+    CMP_LT    shift, and go to state 102
+    CMP_GTE   shift, and go to state 103
+    CMP_LTE   shift, and go to state 104
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+
+    CMP_EQ   error (nonassociative)
+    CMP_NEQ  error (nonassociative)
+
+    $default  reduce using rule 43 (Expression)
+
+
+State 125
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   44           | Expression CMP_NEQ Expression .
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    CMP_GT    shift, and go to state 101
+    CMP_LT    shift, and go to state 102
+    CMP_GTE   shift, and go to state 103
+    CMP_LTE   shift, and go to state 104
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+
+    CMP_EQ   error (nonassociative)
+    CMP_NEQ  error (nonassociative)
+
+    $default  reduce using rule 44 (Expression)
+
+
+State 126
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   45           | Expression CMP_GT Expression .
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+
+    CMP_GT   error (nonassociative)
+    CMP_LT   error (nonassociative)
+    CMP_GTE  error (nonassociative)
+    CMP_LTE  error (nonassociative)
+
+    $default  reduce using rule 45 (Expression)
+
+
+State 127
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   47           | Expression CMP_LT Expression .
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+
+    CMP_GT   error (nonassociative)
+    CMP_LT   error (nonassociative)
+    CMP_GTE  error (nonassociative)
+    CMP_LTE  error (nonassociative)
+
+    $default  reduce using rule 47 (Expression)
+
+
+State 128
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   46           | Expression CMP_GTE Expression .
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+
+    CMP_GT   error (nonassociative)
+    CMP_LT   error (nonassociative)
+    CMP_GTE  error (nonassociative)
+    CMP_LTE  error (nonassociative)
+
+    $default  reduce using rule 46 (Expression)
+
+
+State 129
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   48           | Expression CMP_LTE Expression .
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+
+    CMP_GT   error (nonassociative)
+    CMP_LT   error (nonassociative)
+    CMP_GTE  error (nonassociative)
+    CMP_LTE  error (nonassociative)
+
+    $default  reduce using rule 48 (Expression)
+
+
+State 130
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   49           | Expression OP_ADD Expression .
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    OP_MULT  shift, and go to state 107
+    OP_DIV   shift, and go to state 108
+    OP_MOD   shift, and go to state 109
+    '.'      shift, and go to state 110
+
+    $default  reduce using rule 49 (Expression)
+
+
+State 131
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   50           | Expression OP_MINUS Expression .
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    OP_MULT  shift, and go to state 107
+    OP_DIV   shift, and go to state 108
+    OP_MOD   shift, and go to state 109
+    '.'      shift, and go to state 110
+
+    $default  reduce using rule 50 (Expression)
+
+
+State 132
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   51           | Expression OP_MULT Expression .
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    '.'  shift, and go to state 110
+
+    $default  reduce using rule 51 (Expression)
+
+
+State 133
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   52           | Expression OP_DIV Expression .
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    '.'  shift, and go to state 110
+
+    $default  reduce using rule 52 (Expression)
+
+
+State 134
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   53           | Expression OP_MOD Expression .
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+
+    '.'  shift, and go to state 110
+
+    $default  reduce using rule 53 (Expression)
+
+
+State 135
+
+   72 Funcall: IDENT . '(' ParamList ')'
+
+    '('  shift, and go to state 145
+
+
+State 136
+
+   70 LengthAccess: Expression '.' "length" .
+
+    $default  reduce using rule 70 (LengthAccess)
+
+
+State 137
+
+   58 Expression: Expression '.' Funcall .
+
+    $default  reduce using rule 58 (Expression)
+
+
+State 138
+
+   29 Statement: KW_IF '(' Expression ')' Statement .
+   30          | KW_IF '(' Expression ')' Statement . KW_ELSE Statement
+
+    KW_ELSE  shift, and go to state 146
+
+    $default  reduce using rule 29 (Statement)
+
+
+State 139
+
+   31 Statement: KW_WHILE '(' Expression ')' Statement .
+
+    $default  reduce using rule 31 (Statement)
+
+
+State 140
+
+   37 Statement: KW_SWITCH '(' Expression ')' '{' . Cases KW_DEFAULT ':' Statementp '}'
+
+    $default  reduce using rule 39 (Cases)
+
+    Cases  go to state 147
+
+
+State 141
+
+   32 Statement: KW_PRINTLN '(' Expression ')' ';' .
+
+    $default  reduce using rule 32 (Statement)
+
+
+State 142
+
+   13 MethodDecl: KW_PUBLIC Type MethodSignature '{' VarDecls Statements KW_RETURN Expression ';' '}' .
+
+    $default  reduce using rule 13 (MethodDecl)
+
+
+State 143
+
+   68 Expression: KW_NEW IDENT '(' ')' .
+
+    $default  reduce using rule 68 (Expression)
+
+
+State 144
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   67           | KW_NEW Type '[' Expression . ']'
+   70 LengthAccess: Expression . '.' "length"
+
+    OP_OR     shift, and go to state 97
+    OP_AND    shift, and go to state 98
+    CMP_EQ    shift, and go to state 99
+    CMP_NEQ   shift, and go to state 100
+    CMP_GT    shift, and go to state 101
+    CMP_LT    shift, and go to state 102
+    CMP_GTE   shift, and go to state 103
+    CMP_LTE   shift, and go to state 104
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+    ']'       shift, and go to state 148
+
+
+State 145
+
+   72 Funcall: IDENT '(' . ParamList ')'
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    $default  reduce using rule 73 (ParamList)
+
+    Expression    go to state 149
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+    ParamList     go to state 150
+
+
+State 146
+
+   30 Statement: KW_IF '(' Expression ')' Statement KW_ELSE . Statement
+
+    KW_IF        shift, and go to state 41
+    KW_WHILE     shift, and go to state 42
+    KW_BREAK     shift, and go to state 43
+    KW_CONTINUE  shift, and go to state 44
+    KW_SWITCH    shift, and go to state 45
+    KW_PRINTLN   shift, and go to state 46
+    IDENT        shift, and go to state 63
+    '{'          shift, and go to state 48
+
+    Statement    go to state 151
+    ArrayAccess  go to state 52
+
+
+State 147
+
+   37 Statement: KW_SWITCH '(' Expression ')' '{' Cases . KW_DEFAULT ':' Statementp '}'
+   38 Cases: Cases . Case
+
+    KW_CASE     shift, and go to state 152
+    KW_DEFAULT  shift, and go to state 153
+
+    Case  go to state 154
+
+
+State 148
+
+   67 Expression: KW_NEW Type '[' Expression ']' .
+
+    $default  reduce using rule 67 (Expression)
+
+
+State 149
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+   75 ParamList: Expression .
+
+    OP_OR     shift, and go to state 97
+    OP_AND    shift, and go to state 98
+    CMP_EQ    shift, and go to state 99
+    CMP_NEQ   shift, and go to state 100
+    CMP_GT    shift, and go to state 101
+    CMP_LT    shift, and go to state 102
+    CMP_GTE   shift, and go to state 103
+    CMP_LTE   shift, and go to state 104
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+
+    $default  reduce using rule 75 (ParamList)
+
+
+State 150
+
+   72 Funcall: IDENT '(' ParamList . ')'
+   74 ParamList: ParamList . ',' Expression
+
+    ')'  shift, and go to state 155
+    ','  shift, and go to state 156
+
+
+State 151
+
+   30 Statement: KW_IF '(' Expression ')' Statement KW_ELSE Statement .
+
+    $default  reduce using rule 30 (Statement)
+
+
+State 152
+
+   40 Case: KW_CASE . INT_LITERAL ':' Statementp
+
+    INT_LITERAL  shift, and go to state 157
+
+
+State 153
+
+   37 Statement: KW_SWITCH '(' Expression ')' '{' Cases KW_DEFAULT . ':' Statementp '}'
+
+    ':'  shift, and go to state 158
+
+
+State 154
+
+   38 Cases: Cases Case .
+
+    $default  reduce using rule 38 (Cases)
+
+
+State 155
+
+   72 Funcall: IDENT '(' ParamList ')' .
+
+    $default  reduce using rule 72 (Funcall)
+
+
+State 156
+
+   74 ParamList: ParamList ',' . Expression
+
+    KW_NEW          shift, and go to state 69
+    KW_THIS         shift, and go to state 70
+    KW_NULL         shift, and go to state 71
+    KW_TRUE         shift, and go to state 72
+    KW_FALSE        shift, and go to state 73
+    IDENT           shift, and go to state 74
+    INT_LITERAL     shift, and go to state 75
+    FLOAT_LITERAL   shift, and go to state 76
+    STRING_LITERAL  shift, and go to state 77
+    OP_NOT          shift, and go to state 78
+    '('             shift, and go to state 79
+    '-'             shift, and go to state 80
+
+    Expression    go to state 159
+    LengthAccess  go to state 82
+    ArrayAccess   go to state 83
+
+
+State 157
+
+   40 Case: KW_CASE INT_LITERAL . ':' Statementp
+
+    ':'  shift, and go to state 160
+
+
+State 158
+
+   37 Statement: KW_SWITCH '(' Expression ')' '{' Cases KW_DEFAULT ':' . Statementp '}'
+
+    KW_IF        shift, and go to state 41
+    KW_WHILE     shift, and go to state 42
+    KW_BREAK     shift, and go to state 43
+    KW_CONTINUE  shift, and go to state 44
+    KW_SWITCH    shift, and go to state 45
+    KW_PRINTLN   shift, and go to state 46
+    IDENT        shift, and go to state 63
+    '{'          shift, and go to state 48
+
+    Statementp   go to state 161
+    Statement    go to state 51
+    ArrayAccess  go to state 52
+
+
+State 159
+
+   41 Expression: Expression . OP_OR Expression
+   42           | Expression . OP_AND Expression
+   43           | Expression . CMP_EQ Expression
+   44           | Expression . CMP_NEQ Expression
+   45           | Expression . CMP_GT Expression
+   46           | Expression . CMP_GTE Expression
+   47           | Expression . CMP_LT Expression
+   48           | Expression . CMP_LTE Expression
+   49           | Expression . OP_ADD Expression
+   50           | Expression . OP_MINUS Expression
+   51           | Expression . OP_MULT Expression
+   52           | Expression . OP_DIV Expression
+   53           | Expression . OP_MOD Expression
+   58           | Expression . '.' Funcall
+   70 LengthAccess: Expression . '.' "length"
+   74 ParamList: ParamList ',' Expression .
+
+    OP_OR     shift, and go to state 97
+    OP_AND    shift, and go to state 98
+    CMP_EQ    shift, and go to state 99
+    CMP_NEQ   shift, and go to state 100
+    CMP_GT    shift, and go to state 101
+    CMP_LT    shift, and go to state 102
+    CMP_GTE   shift, and go to state 103
+    CMP_LTE   shift, and go to state 104
+    OP_ADD    shift, and go to state 105
+    OP_MINUS  shift, and go to state 106
+    OP_MULT   shift, and go to state 107
+    OP_DIV    shift, and go to state 108
+    OP_MOD    shift, and go to state 109
+    '.'       shift, and go to state 110
+
+    $default  reduce using rule 74 (ParamList)
+
+
+State 160
+
+   40 Case: KW_CASE INT_LITERAL ':' . Statementp
+
+    KW_IF        shift, and go to state 41
+    KW_WHILE     shift, and go to state 42
+    KW_BREAK     shift, and go to state 43
+    KW_CONTINUE  shift, and go to state 44
+    KW_SWITCH    shift, and go to state 45
+    KW_PRINTLN   shift, and go to state 46
+    IDENT        shift, and go to state 63
+    '{'          shift, and go to state 48
+
+    Statementp   go to state 162
+    Statement    go to state 51
+    ArrayAccess  go to state 52
+
+
+State 161
+
+   26 Statementp: Statementp . Statement
+   37 Statement: KW_SWITCH '(' Expression ')' '{' Cases KW_DEFAULT ':' Statementp . '}'
+
+    KW_IF        shift, and go to state 41
+    KW_WHILE     shift, and go to state 42
+    KW_BREAK     shift, and go to state 43
+    KW_CONTINUE  shift, and go to state 44
+    KW_SWITCH    shift, and go to state 45
+    KW_PRINTLN   shift, and go to state 46
+    IDENT        shift, and go to state 63
+    '{'          shift, and go to state 48
+    '}'          shift, and go to state 163
+
+    Statement    go to state 66
+    ArrayAccess  go to state 52
+
+
+State 162
+
+   26 Statementp: Statementp . Statement
+   40 Case: KW_CASE INT_LITERAL ':' Statementp .
+
+    KW_IF        shift, and go to state 41
+    KW_WHILE     shift, and go to state 42
+    KW_BREAK     shift, and go to state 43
+    KW_CONTINUE  shift, and go to state 44
+    KW_SWITCH    shift, and go to state 45
+    KW_PRINTLN   shift, and go to state 46
+    IDENT        shift, and go to state 63
+    '{'          shift, and go to state 48
+
+    $default  reduce using rule 40 (Case)
+
+    Statement    go to state 66
+    ArrayAccess  go to state 52
+
+
+State 163
+
+   37 Statement: KW_SWITCH '(' Expression ')' '{' Cases KW_DEFAULT ':' Statementp '}' .
+
+    $default  reduce using rule 37 (Statement)
